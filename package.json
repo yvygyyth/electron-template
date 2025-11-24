@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
+    "electron": "^29.1.1",
     "electron-builder": "^24.13.3",
     "typescript": "^5.4.2",
     "vite": "^5.1.5",
@@ -33,7 +34,9 @@
     "vue": "^3.4.21",
     "vue-tsc": "^2.0.6"
   },
-  "dependencies": {
-    "electron": "^39.2.3"
+  "build": {
+    "electronVersion": "21.4.2",
+    "productName": "electron-demo",
+    "asar": true
   }
 }
