@@ -5,6 +5,7 @@ import electron from 'vite-plugin-electron/simple'
 import pkg from './package.json'
 
 // https://vitejs.dev/config/
+// Vite 配置文件
 export default defineConfig(({ command }) => {
   fs.rmSync('dist-electron', { recursive: true, force: true })
 
@@ -17,11 +18,11 @@ export default defineConfig(({ command }) => {
       vue(),
       electron({
         main: {
-          // Shortcut of `build.lib.entry`
+          // `build.lib.entry` 的快捷方式
           entry: 'electron/main/index.ts',
           onstart({ startup }) {
             if (process.env.VSCODE_DEBUG) {
-              console.log(/* For `.vscode/.debug.script.mjs` */'[startup] Electron App')
+              console.log(/* 用于 `.vscode/.debug.script.mjs` */'[startup] Electron App')
             } else {
               startup()
             }
@@ -32,22 +33,22 @@ export default defineConfig(({ command }) => {
               minify: isBuild,
               outDir: 'dist-electron/main',
               rollupOptions: {
-                // Some third-party Node.js libraries may not be built correctly by Vite, especially `C/C++` addons, 
-                // we can use `external` to exclude them to ensure they work correctly.
-                // Others need to put them in `dependencies` to ensure they are collected into `app.asar` after the app is built.
-                // Of course, this is not absolute, just this way is relatively simple. :)
+                // 一些第三方 Node.js 库可能无法被 Vite 正确构建，特别是 `C/C++` 插件，
+                // 我们可以使用 `external` 来排除它们以确保它们能正常工作。
+                // 其他的需要将它们放在 `dependencies` 中，以确保在应用构建后它们被收集到 `app.asar` 中。
+                // 当然，这不是绝对的，只是这种方式相对简单。:)
                 external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
               },
             },
           },
         },
         preload: {
-          // Shortcut of `build.rollupOptions.input`.
-          // Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
+          // `build.rollupOptions.input` 的快捷方式。
+          // Preload 脚本可能包含 Web 资源，所以使用 `build.rollupOptions.input` 而不是 `build.lib.entry`。
           input: 'electron/preload/index.ts',
           vite: {
             build: {
-              sourcemap: sourcemap ? 'inline' : undefined, // #332
+              sourcemap: sourcemap ? 'inline' : undefined, // #332 内联 sourcemap
               minify: isBuild,
               outDir: 'dist-electron/preload',
               rollupOptions: {
@@ -56,9 +57,9 @@ export default defineConfig(({ command }) => {
             },
           },
         },
-        // Ployfill the Electron and Node.js API for Renderer process.
-        // If you want use Node.js in Renderer process, the `nodeIntegration` needs to be enabled in the Main process.
-        // See 👉 https://github.com/electron-vite/vite-plugin-electron-renderer
+        // 为渲染进程填充 Electron 和 Node.js API。
+        // 如果你想在渲染进程中使用 Node.js，需要在主进程中启用 `nodeIntegration`。
+        // 查看 👉 https://github.com/electron-vite/vite-plugin-electron-renderer
         renderer: {},
       }),
     ],
