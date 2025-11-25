@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import electron from 'vite-plugin-electron/simple'
+import electron from 'vite-plugin-electron'
 import pkg from './package.json'
 
 // https://vitejs.dev/config/
@@ -16,9 +16,8 @@ export default defineConfig(({ command }) => {
   return {
     plugins: [
       vue(),
-      electron({
-        main: {
-          // `build.lib.entry` 的快捷方式
+      electron([
+        {
           entry: 'electron/main/index.ts',
           onstart({ startup }) {
             if (process.env.VSCODE_DEBUG) {
@@ -42,10 +41,13 @@ export default defineConfig(({ command }) => {
             },
           },
         },
-        preload: {
-          // `build.rollupOptions.input` 的快捷方式。
-          // Preload 脚本可能包含 Web 资源，所以使用 `build.rollupOptions.input` 而不是 `build.lib.entry`。
-          input: 'electron/preload/index.ts',
+        {
+          entry: 'electron/preload/index.ts',
+          onstart({ reload }) {
+            // Notify the Renderer process to reload the page when the Preload scripts build is complete,
+            // instead of restarting the entire Electron App.
+            reload()
+          },
           vite: {
             build: {
               sourcemap: sourcemap ? 'inline' : undefined, // #332 内联 sourcemap
@@ -57,11 +59,7 @@ export default defineConfig(({ command }) => {
             },
           },
         },
-        // 为渲染进程填充 Electron 和 Node.js API。
-        // 如果你想在渲染进程中使用 Node.js，需要在主进程中启用 `nodeIntegration`。
-        // 查看 👉 https://github.com/electron-vite/vite-plugin-electron-renderer
-        renderer: {},
-      }),
+      ]),
     ],
     server: process.env.VSCODE_DEBUG && (() => {
       const url = new URL(pkg.debug.env.VITE_DEV_SERVER_URL)
