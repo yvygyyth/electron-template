@@ -1,13 +1,32 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.tsc.autoDetect": "off",
-  "json.schemas": [
-    {
-      "fileMatch": [
-        "/*electron-builder.json5",
-        "/*electron-builder.json"
-      ],
-      "url": "https://json.schemastore.org/electron-builder"
-    }
-  ]
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.tsc.autoDetect": "off",
+    "json.schemas": [
+        {
+            "fileMatch": ["/*electron-builder.json5", "/*electron-builder.json"],
+            "url": "https://json.schemastore.org/electron-builder"
+        }
+    ],
+    // 保存时自动格式化
+    "editor.formatOnSave": true,
+    // 使用 Prettier 作为默认格式化器
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    // 为特定文件类型设置格式化器
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    // 确保使用项目根目录的 .prettierrc 配置
+    "prettier.requireConfig": true
 }
