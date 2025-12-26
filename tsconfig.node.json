@@ -1,10 +1,15 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": ["vite.config.ts", "package.json", "electron"]
+    "compilerOptions": {
+        "composite": true,
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "@main/*": ["./electron/main/*"],
+            "@preload/*": ["./electron/preload/*"]
+        }
+    },
+    "include": ["vite.config.ts", "package.json", "electron"]
 }
