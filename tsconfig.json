@@ -14,9 +14,10 @@
         "noEmit": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@share/*": ["./electron/share/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src", "electron/share"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
