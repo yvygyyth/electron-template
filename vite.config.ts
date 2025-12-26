@@ -15,10 +15,13 @@ export default defineConfig(({ command }) => {
     const sourcemap = isServe || !!process.env.VSCODE_DEBUG
 
     return {
-        aliasPath: {
-            '@': path.resolve(__dirname, 'src'),
-            '@main': path.resolve(__dirname, 'electron/main'),
-            '@preload': path.resolve(__dirname, 'electron/preload')
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'src'),
+                '@main': path.resolve(__dirname, 'electron/main'),
+                '@preload': path.resolve(__dirname, 'electron/preload'),
+                '@share': path.resolve(__dirname, 'electron/share')
+            }
         },
         plugins: [
             vue(),
@@ -33,6 +36,11 @@ export default defineConfig(({ command }) => {
                         }
                     },
                     vite: {
+                        resolve: {
+                            alias: {
+                                '@share': path.resolve(__dirname, 'electron/share')
+                            }
+                        },
                         build: {
                             sourcemap,
                             minify: isBuild,
@@ -55,6 +63,11 @@ export default defineConfig(({ command }) => {
                         reload()
                     },
                     vite: {
+                        resolve: {
+                            alias: {
+                                '@share': path.resolve(__dirname, 'electron/share')
+                            }
+                        },
                         build: {
                             sourcemap: sourcemap ? 'inline' : undefined, // #332 内联 sourcemap
                             minify: isBuild,
