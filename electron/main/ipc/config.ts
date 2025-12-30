@@ -1,48 +1,58 @@
 import { ipcMain } from 'electron'
-import { configRepository } from '../db/repositories/config'
+import { configService } from '@main/service/config'
+import { GetConfigRequestSchema, UpdateConfigRequestSchema } from '@share/index'
+import { ConfigSchemaMap } from '@share/index'
+import type { ConfigKey, ConfigValueType, GetConfigRequest, UpdateConfigRequest } from '@share/index'
+
+export const ConfigIpcHandler = {
+    get: 'config:get',
+    update: 'config:update',
+    getAll: 'config:getAll'
+} as const
 
 /**
  * 配置相关的 IPC 处理器
  */
 export function registerConfigHandlers() {
     // 获取配置
-    ipcMain.handle('config:get', async (_, key: string) => {
+    ipcMain.handle(ConfigIpcHandler.get, async (_, data: GetConfigRequest) => {
         try {
-            return await configRepository.getByKey(key)
+            // 校验请求参数
+            const validatedData = GetConfigRequestSchema.parse(data)
+            return configService.getConfig(validatedData.key)
         } catch (error) {
             console.error('获取配置失败:', error)
             throw error
         }
     })
 
-    // 创建或更新配置
-    ipcMain.handle('config:upsert', async (_, config: { key: string; value: any; description?: string | null }) => {
+    // 更新配置（仅允许更新已存在的配置，不允许创建）
+    ipcMain.handle(ConfigIpcHandler.update, async (_, data: UpdateConfigRequest) => {
         try {
-            return await configRepository.upsert({
-                key: config.key,
-                value: config.value,
-                description: config.description ?? null
-            })
-        } catch (error) {
-            console.error('创建或更新配置失败:', error)
-            throw error
-        }
-    })
+            // 校验请求参数
+            const validatedData = UpdateConfigRequestSchema.parse(data)
+            const { key, value } = validatedData
 
-    // 删除配置
-    ipcMain.handle('config:delete', async (_, key: string) => {
-        try {
-            return await configRepository.delete(key)
+            // 校验配置值（根据 key 对应的 schema）
+            const configKey = key as ConfigKey
+            const schema = ConfigSchemaMap[configKey]
+            if (!schema) {
+                throw new Error(`未找到配置 key "${key}" 对应的 schema`)
+            }
+            const validatedValue = schema.parse(value) as ConfigValueType<typeof configKey>
+
+            // 调用业务层（只允许更新，不允许创建）
+            return configService.updateConfig(configKey, validatedValue)
         } catch (error) {
-            console.error('删除配置失败:', error)
+            console.error('更新配置失败:', error)
             throw error
         }
     })
 
     // 获取所有配置
-    ipcMain.handle('config:getAll', async () => {
+    ipcMain.handle(ConfigIpcHandler.getAll, async () => {
         try {
-            return await configRepository.getAll()
+            return configService.getAllConfigs()
         } catch (error) {
             console.error('获取所有配置失败:', error)
             throw error
@@ -54,8 +64,7 @@ export function registerConfigHandlers() {
  * 注销配置相关的 IPC 处理器
  */
 export function unregisterConfigHandlers() {
-    ipcMain.removeHandler('config:get')
-    ipcMain.removeHandler('config:upsert')
-    ipcMain.removeHandler('config:delete')
-    ipcMain.removeHandler('config:getAll')
+    ipcMain.removeHandler(ConfigIpcHandler.get)
+    ipcMain.removeHandler(ConfigIpcHandler.update)
+    ipcMain.removeHandler(ConfigIpcHandler.getAll)
 }

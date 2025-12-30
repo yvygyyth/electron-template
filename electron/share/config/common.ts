@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ConfigKeys, type ConfigKey } from './enum'
 
 // ==================== 配置验证模型定义 ====================
 
@@ -45,23 +46,6 @@ export type AppSettingsConfig = z.infer<typeof AppSettingsConfigSchema>
  */
 export type ThemeConfig = z.infer<typeof ThemeConfigSchema>
 
-// ==================== 配置 Key 常量 ====================
-
-/**
- * 配置 Key 常量定义
- */
-export const ConfigKeys = {
-    /** 应用设置 */
-    APP_SETTINGS: 'app.settings',
-    /** 主题配置 */
-    THEME: 'app.theme'
-} as const
-
-/**
- * 配置 Key 类型
- */
-export type ConfigKey = (typeof ConfigKeys)[keyof typeof ConfigKeys]
-
 // ==================== 配置类型映射 ====================
 
 /**
@@ -86,19 +70,14 @@ export const ConfigSchemaMap: Record<ConfigKey, z.ZodSchema> = {
 export type ConfigValueType<K extends ConfigKey> = ConfigTypeMap[K]
 
 /**
- * 根据配置 key 获取对应的 Schema
+ * 创建配置项的输入类型（用于种子数据和批量创建）
+ * value 字段存储为 JSON 字符串
  */
-export function getConfigSchema<K extends ConfigKey>(key: K): z.ZodSchema {
-    return ConfigSchemaMap[key]
-}
-
-/**
- * 验证配置值
- * @param key 配置 key
- * @param value 配置值
- * @returns 验证后的配置值
- */
-export function validateConfig<K extends ConfigKey>(key: K, value: unknown): ConfigValueType<K> {
-    const schema = getConfigSchema(key)
-    return schema.parse(value) as ConfigValueType<K>
+export interface ConfigCreateInput {
+    /** 配置 key */
+    key: ConfigKey
+    /** 配置值（JSON 字符串） */
+    value: string
+    /** 配置说明 */
+    description?: string | null
 }

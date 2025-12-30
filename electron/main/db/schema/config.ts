@@ -1,5 +1,5 @@
-import { Generated, JSONColumnType } from 'kysely'
-import type { ConfigKey, ConfigValueType } from '@share/config'
+import { Generated } from 'kysely'
+import type { ConfigKey } from '@share/index'
 import type { ColumnDefinition, IndexDefinition, TriggerDefinition, TableDefinition } from '../type'
 
 /**
@@ -15,7 +15,7 @@ export interface ConfigTable {
     key: ConfigKey
 
     /** JSON 配置内容（所有可能的配置值类型的联合） */
-    value: JSONColumnType<ConfigValueType<ConfigKey>>
+    value: string
 
     /** 配置说明 */
     description: string | null
