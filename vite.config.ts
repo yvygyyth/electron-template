@@ -66,6 +66,7 @@ export default defineConfig(({ command }) => {
                     vite: {
                         resolve: {
                             alias: {
+                                '@main': path.resolve(__dirname, 'electron/main'),
                                 '@preload': path.resolve(__dirname, 'electron/preload'),
                                 '@share': path.resolve(__dirname, 'electron/share')
                             }

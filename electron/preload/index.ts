@@ -1,8 +1,9 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { useLoading, domReady } from '@preload/hooks/useLoading'
+import type { IpcRenderer } from '@preload/modules/index'
 
 // --------- Expose some API to the Renderer process ---------
-contextBridge.exposeInMainWorld('ipcRenderer', {
+const ipc: IpcRenderer = {
     on(...args: Parameters<typeof ipcRenderer.on>) {
         const [channel, listener] = args
         return ipcRenderer.on(channel, (event, ...args) => listener(event, ...args))
@@ -15,14 +16,15 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         const [channel, ...omit] = args
         return ipcRenderer.send(channel, ...omit)
     },
-    invoke(...args: Parameters<typeof ipcRenderer.invoke>) {
-        const [channel, ...omit] = args
-        return ipcRenderer.invoke(channel, ...omit)
+    invoke(channel, ...args) {
+        return ipcRenderer.invoke(channel as any, ...args)
     }
 
     // You can expose other APTs you need here.
     // ...
-})
+}
+
+contextBridge.exposeInMainWorld('ipcRenderer', ipc)
 
 // ----------------------------------------------------------------------
 
