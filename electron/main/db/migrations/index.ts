@@ -14,37 +14,43 @@ const tableDefinitions = [configTableDefinition]
 const migrationData = transformTableDefinitions(tableDefinitions)
 
 export const runMigrations = async (db: Kysely<any>) => {
-    // 这里先只做数据结构转换，后续再实现执行逻辑
-    const { createTable, createdTable, createIndex, createdIndex, createTrigger, createdTrigger } = useLifecycle(
+    const { createTable, createdTable, createIndex, createdIndex, createTrigger, createdTrigger, run } = useLifecycle(
         db,
         migrationData
     )
 
+    // 注册建表前钩子：创建表（如果不存在）
     createTable(async ({ db, tableName, columns }) => {
-        // 先创建表（如果不存在）
         await createTablesFromColumns(db, tableName, columns)
     })
 
+    // 注册建表后钩子：检查并添加缺失的列
     createdTable(async ({ db, tableName, columns }) => {
-        // 然后检查并添加缺失的列（如果表已存在）
         await addMissingColumns(db, tableName, columns)
     })
 
-    createIndex(({ db, tableName, indexs }) => {
-        createIndexFromDefinition(db, tableName, indexs)
+    // 注册建索引前钩子：创建索引
+    createIndex(async ({ db, tableName, indexs }) => {
+        await createIndexFromDefinition(db, tableName, indexs)
     })
 
+    // 注册建索引后钩子
     createdIndex((ctx) => {
         //建索引后逻辑
     })
 
-    createTrigger(({ db, tableName, triggers }) => {
-        createTriggerFromDefinition(db, tableName, triggers)
+    // 注册建触发器前钩子：创建触发器
+    createTrigger(async ({ db, tableName, triggers }) => {
+        await createTriggerFromDefinition(db, tableName, triggers)
     })
 
+    // 注册建触发器后钩子
     createdTrigger((ctx) => {
         //建触发器后逻辑
     })
+
+    // 按顺序执行所有注册的生命周期回调
+    await run()
 
     // 插入种子数据（如果该表有定义种子数据）
     await seedAllTables(db)
