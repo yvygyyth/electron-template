@@ -1,5 +1,10 @@
-import type { GetConfigRequest, UpdateConfigRequest, GetConfigResponse, GetAllConfigResponse } from '@share/index'
-import type { ConfigIpcHandler } from '@main/ipc/config'
+import type {
+    GetConfigRequest,
+    UpdateConfigRequest,
+    GetConfigResponse,
+    GetAllConfigResponse,
+    ConfigIpcHandler
+} from '@share/index'
 
 /**
  * IPC Channel 到请求/响应类型的映射

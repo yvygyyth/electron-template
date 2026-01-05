@@ -1,14 +1,7 @@
 import { ipcMain } from 'electron'
 import { configService } from '@main/service/config'
-import { GetConfigRequestSchema, UpdateConfigRequestSchema } from '@share/index'
-import { ConfigSchemaMap } from '@share/index'
+import { GetConfigRequestSchema, UpdateConfigRequestSchema, ConfigSchemaMap, ConfigIpcHandler } from '@share/index'
 import type { ConfigKey, ConfigValueType, GetConfigRequest, UpdateConfigRequest } from '@share/index'
-
-export const ConfigIpcHandler = {
-    get: 'config:get',
-    update: 'config:update',
-    getAll: 'config:getAll'
-} as const
 
 /**
  * 配置相关的 IPC 处理器
