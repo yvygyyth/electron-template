@@ -77,8 +77,8 @@ export interface ColumnDefinition<T extends ColumnType = ColumnType> {
     notNull?: boolean
     /** 是否唯一 */
     unique?: boolean
-    /** 默认值 */
-    defaultValue?: ColumnValueMap[T]
+    /** 默认值（可以是字面值或 SQL 表达式字符串，如 "CAST(strftime('%s', 'now') AS INTEGER)"） */
+    defaultValue?: ColumnValueMap[T] | string
     /** 外键约束定义 */
     foreignKey?: ForeignKeyDefinition
 }

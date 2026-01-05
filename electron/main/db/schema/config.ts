@@ -36,7 +36,7 @@ export const configTableColumns: ColumnDefinition[] = [
     { name: 'key', type: 'text', notNull: true, unique: true },
     { name: 'value', type: 'text', notNull: true }, // SQLite 中 JSON 存储为 TEXT
     { name: 'description', type: 'text' },
-    { name: 'created_at', type: 'integer', notNull: true },
+    { name: 'created_at', type: 'integer', notNull: true, defaultValue: "(CAST(strftime('%s', 'now') AS INTEGER))" },
     { name: 'updated_at', type: 'integer', notNull: true }
 ]
 
@@ -54,15 +54,6 @@ export const configTableIndexes: IndexDefinition[] = [
  * Config 表的触发器定义数组
  */
 export const configTableTriggers: TriggerDefinition[] = [
-    // INSERT 触发器：自动设置 created_at 和 updated_at
-    // 在插入之前，如果 created_at 或 updated_at 为空或为 0，则自动设置为当前时间戳
-    {
-        name: 'trigger_config_insert_timestamps',
-        table: 'config',
-        timing: 'BEFORE',
-        event: 'INSERT',
-        sql: "UPDATE config SET created_at = CASE WHEN NEW.created_at IS NULL OR NEW.created_at = 0 THEN CAST(strftime('%s', 'now') AS INTEGER) ELSE NEW.created_at END, updated_at = CASE WHEN NEW.updated_at IS NULL OR NEW.updated_at = 0 THEN CAST(strftime('%s', 'now') AS INTEGER) ELSE NEW.updated_at END WHERE rowid = NEW.rowid;"
-    },
     // UPDATE 触发器：自动更新 updated_at（不修改 created_at）
     {
         name: 'trigger_config_update_timestamp',

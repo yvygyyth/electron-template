@@ -1,6 +1,7 @@
 import type { Kysely } from 'kysely'
 import { sql } from 'kysely'
 import type { ColumnDefinition } from '../../type'
+import { isSqlExpression } from './sqlTool'
 
 /**
  * 检查表是否存在
@@ -65,10 +66,25 @@ function buildColumnSql(column: ColumnDefinition): string {
         sql += ' NOT NULL'
     }
     if (column.defaultValue !== undefined) {
-        const defaultValue =
-            typeof column.defaultValue === 'string'
-                ? `'${column.defaultValue.replace(/'/g, "''")}'`
-                : column.defaultValue
+        // 如果 defaultValue 是被括号包裹的字符串，当作 SQL 语句执行
+        // 否则作为字面值字符串处理
+        let defaultValue: string | number | Buffer
+        const value = column.defaultValue
+        if (typeof value === 'string') {
+            // 使用公共函数检查是否是 SQL 表达式
+            if (isSqlExpression(value)) {
+                // SQL 表达式已经包含括号，直接使用
+                defaultValue = value
+            } else {
+                // 字面值字符串需要转义单引号并用引号包裹
+                // 注意：此时 value 仍然是 string 类型，但 TypeScript 类型系统需要类型断言
+                const stringValue: string = value
+                defaultValue = `'${stringValue.replace(/'/g, "''")}'`
+            }
+        } else {
+            // 数字或 Buffer 直接返回
+            defaultValue = value
+        }
         sql += ` DEFAULT ${defaultValue}`
     }
 

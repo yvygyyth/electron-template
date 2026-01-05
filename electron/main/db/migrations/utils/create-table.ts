@@ -1,5 +1,7 @@
 import type { Kysely } from 'kysely'
+import { sql } from 'kysely'
 import type { ColumnDefinition } from '../../type'
+import { isSqlExpression } from './sqlTool'
 
 /**
  * 检查表是否存在
@@ -52,7 +54,13 @@ export async function createTablesFromColumns(
                 col = col.unique()
             }
             if (column.defaultValue !== undefined) {
-                col = col.defaultTo(column.defaultValue)
+                // 如果 defaultValue 是被括号包裹的字符串，当作 SQL 语句执行
+                // 否则使用字面值
+                if (isSqlExpression(column.defaultValue)) {
+                    col = col.defaultTo(sql.raw(column.defaultValue as string))
+                } else {
+                    col = col.defaultTo(column.defaultValue)
+                }
             }
             // 添加外键约束
             // SQLite 允许外键引用"尚未存在的表"，只要插入数据时表都存在即可
