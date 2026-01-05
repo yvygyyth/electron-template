@@ -1,5 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
-import { useLoading } from '@preload/hooks/useLoading'
+import { useLoading, domReady } from '@preload/hooks/useLoading'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -23,21 +23,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     // You can expose other APTs you need here.
     // ...
 })
-
-// --------- Preload scripts loading ---------
-function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
-    return new Promise((resolve) => {
-        if (condition.includes(document.readyState)) {
-            resolve(true)
-        } else {
-            document.addEventListener('readystatechange', () => {
-                if (condition.includes(document.readyState)) {
-                    resolve(true)
-                }
-            })
-        }
-    })
-}
 
 // ----------------------------------------------------------------------
 
