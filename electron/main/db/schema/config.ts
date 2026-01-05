@@ -37,7 +37,7 @@ export const configTableColumns: ColumnDefinition[] = [
     { name: 'value', type: 'text', notNull: true }, // SQLite 中 JSON 存储为 TEXT
     { name: 'description', type: 'text' },
     { name: 'created_at', type: 'integer', notNull: true, defaultValue: "(CAST(strftime('%s', 'now') AS INTEGER))" },
-    { name: 'updated_at', type: 'integer', notNull: true }
+    { name: 'updated_at', type: 'integer', notNull: true, defaultValue: "(CAST(strftime('%s', 'now') AS INTEGER))" }
 ]
 
 /**

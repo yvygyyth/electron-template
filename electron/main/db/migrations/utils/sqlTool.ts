@@ -9,10 +9,10 @@ import type { ColumnDefinition } from '../../type'
  *
  * @example
  * ```typescript
- * isSqlExpression("CAST(strftime('%s', 'now') AS INTEGER)") // false（未被括号包裹）
- * isSqlExpression("(CAST(strftime('%s', 'now') AS INTEGER))") // true（被括号包裹）
- * isSqlExpression("some text") // false
- * isSqlExpression(123) // false
+ * isSqlExpression【"CAST(strftime('%s', 'now') AS INTEGER)"】 // false（未被括号包裹）
+ * isSqlExpression【"(CAST(strftime('%s', 'now') AS INTEGER))"】 // true（被括号包裹）
+ * isSqlExpression【"some text"】 // false
+ * isSqlExpression【123】 // false
  * ```
  */
 export function isSqlExpression(defaultValue: ColumnDefinition['defaultValue']): defaultValue is string {

@@ -20,19 +20,13 @@ export const runMigrations = async (db: Kysely<any>) => {
     )
 
     // 注册建表前钩子：创建表（如果不存在）
-    createTable(async ({ db, tableName, columns }) => {
-        await createTablesFromColumns(db, tableName, columns)
-    })
+    createTable(({ db, tableName, columns }) => createTablesFromColumns(db, tableName, columns))
 
     // 注册建表后钩子：检查并添加缺失的列
-    createdTable(async ({ db, tableName, columns }) => {
-        await addMissingColumns(db, tableName, columns)
-    })
+    createdTable(({ db, tableName, columns }) => addMissingColumns(db, tableName, columns))
 
     // 注册建索引前钩子：创建索引
-    createIndex(async ({ db, tableName, indexs }) => {
-        await createIndexFromDefinition(db, tableName, indexs)
-    })
+    createIndex(({ db, tableName, indexs }) => createIndexFromDefinition(db, tableName, indexs))
 
     // 注册建索引后钩子
     createdIndex((ctx) => {
@@ -40,9 +34,7 @@ export const runMigrations = async (db: Kysely<any>) => {
     })
 
     // 注册建触发器前钩子：创建触发器
-    createTrigger(async ({ db, tableName, triggers }) => {
-        await createTriggerFromDefinition(db, tableName, triggers)
-    })
+    createTrigger(({ db, tableName, triggers }) => createTriggerFromDefinition(db, tableName, triggers))
 
     // 注册建触发器后钩子
     createdTrigger((ctx) => {
