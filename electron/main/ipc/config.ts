@@ -28,9 +28,7 @@ async function getConfigHandler<K extends ConfigKey>(key: K): Promise<GetConfigR
  * @param data 更新配置的请求数据
  * @returns 更新后的配置项
  */
-async function updateConfigHandler<K extends ConfigKey>(
-    data: UpdateConfigRequest & { key: K }
-): Promise<GetConfigResponse<K>> {
+async function updateConfigHandler<K extends ConfigKey>(data: UpdateConfigRequest<K>): Promise<GetConfigResponse<K>> {
     // 校验请求参数
     const validatedData = UpdateConfigRequestSchema.parse(data)
     const { key, value } = validatedData
@@ -94,6 +92,7 @@ export function registerConfigHandlers() {
     // 更新配置（仅允许更新已存在的配置，不允许创建）
     ipcMain.handle(ConfigIpcHandler.update, async (_, data: UpdateConfigRequest) => {
         try {
+            // 运行时已验证 data.key 是有效的 ConfigKey，使用类型断言
             return updateConfigHandler(data)
         } catch (error) {
             console.error('更新配置失败:', error)
