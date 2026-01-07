@@ -1,6 +1,7 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { useLoading, domReady } from '@preload/hooks/useLoading'
 import type { IpcRenderer } from '@preload/modules/index'
+import type { IpcRendererInvoke } from '@preload/modules/invoke'
 
 // --------- Expose some API to the Renderer process ---------
 const ipc: IpcRenderer = {
@@ -16,9 +17,9 @@ const ipc: IpcRenderer = {
         const [channel, ...omit] = args
         return ipcRenderer.send(channel, ...omit)
     },
-    invoke(channel, ...args) {
-        return ipcRenderer.invoke(channel as any, ...args)
-    }
+    invoke: ((channel, ...args) => {
+        return ipcRenderer.invoke(channel, ...args)
+    }) as IpcRendererInvoke
 
     // You can expose other APTs you need here.
     // ...
