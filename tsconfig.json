@@ -15,9 +15,10 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"],
-            "@share/*": ["./electron/share/*"]
+            "@share/*": ["./electron/share/*"],
+            "@preload/*": ["./electron/preload/*"]
         }
     },
-    "include": ["src", "electron/share"],
+    "include": ["src", "electron/share", "electron/preload"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

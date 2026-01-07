@@ -20,3 +20,5 @@ export function unregisterIpcHandlers(): void {
     unregisterConfigHandlers()
     unregisterWindowHandlers()
 }
+
+export type * from './config'

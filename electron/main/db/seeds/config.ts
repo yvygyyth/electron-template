@@ -38,20 +38,14 @@ const configSeedDataRaw: Array<SeedDataItem<ConfigKey>> = [
     {
         key: ConfigKeys.APP_SETTINGS,
         value: {
-            language: 'zh-CN',
-            autoCheckUpdate: true,
-            autoStart: false,
-            showTray: true
+            language: 'zh-CN'
         } satisfies ConfigTypeMap[typeof ConfigKeys.APP_SETTINGS],
         description: '应用设置配置'
     },
     {
         key: ConfigKeys.THEME,
         value: {
-            mode: 'auto',
-            primaryColor: '#007bff',
-            fontSize: 14,
-            enableAnimation: true
+            fontSize: 14
         } satisfies ConfigTypeMap[typeof ConfigKeys.THEME],
         description: '主题配置'
     }

@@ -6,10 +6,7 @@ import { ConfigKeyArray } from './enum'
 /**
  * 获取单个配置的请求模型
  */
-export const GetConfigRequestSchema = z.object({
-    /** 配置 key */
-    key: z.enum(ConfigKeyArray)
-})
+export const GetConfigRequestSchema = z.enum(ConfigKeyArray)
 
 /**
  * 更新配置的请求模型

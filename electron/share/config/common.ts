@@ -8,30 +8,15 @@ import { ConfigKeys, type ConfigKey } from './enum'
  */
 export const AppSettingsConfigSchema = z.object({
     /** 应用语言 */
-    language: z.enum(['zh-CN', 'en-US', 'ja-JP']).default('zh-CN'),
-    /** 是否自动检查更新 */
-    autoCheckUpdate: z.boolean().default(true),
-    /** 是否开机自启 */
-    autoStart: z.boolean().default(false),
-    /** 是否显示系统托盘 */
-    showTray: z.boolean().default(true)
+    language: z.enum(['zh-CN', 'en-US', 'ja-JP']).default('zh-CN')
 })
 
 /**
  * 主题配置验证模型
  */
 export const ThemeConfigSchema = z.object({
-    /** 主题模式 */
-    mode: z.enum(['light', 'dark', 'auto']).default('auto'),
-    /** 主色调 */
-    primaryColor: z
-        .string()
-        .regex(/^#[0-9A-Fa-f]{6}$/)
-        .default('#007bff'),
     /** 字体大小 */
-    fontSize: z.number().int().min(10).max(24).default(14),
-    /** 是否启用动画 */
-    enableAnimation: z.boolean().default(true)
+    fontSize: z.number().int().min(10).max(24).default(14)
 })
 
 // ==================== 导出类型 ====================
