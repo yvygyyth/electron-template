@@ -1,5 +1,4 @@
-// 假设 ConfigHandlers 已定义
-export type IpcCall<H extends Record<string, (...args: any) => any>> = <K extends keyof H>(
-    type: K,
-    ...args: Parameters<H[K]>
-) => ReturnType<H[K]>
+export type IpcCall<H extends Record<PropertyKey, (...args: any) => any>> = <C extends keyof H>(
+    channel: C,
+    ...args: Parameters<H[C]>
+) => ReturnType<H[C]>
