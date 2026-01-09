@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "composite": true,
+        "declaration": true,
+        "declarationMap": true,
         "target": "ES2022",
         "module": "ESNext",
         "moduleResolution": "Node",
@@ -13,5 +15,5 @@
             "@share/*": ["./electron/share/*"]
         }
     },
-    "include": ["vite.config.ts", "package.json", "electron"]
+    "include": ["vite.config.ts", "package.json", "electron/main", "electron/preload", "electron/share"]
 }
