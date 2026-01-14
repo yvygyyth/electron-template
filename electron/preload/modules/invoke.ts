@@ -1,4 +1,4 @@
-import type { ConfigHandlers } from '@main/ipc/config'
+import type { ConfigHandlers } from '@main/ipc/invoke'
 import type { IpcCall } from '@preload/modules/tool'
 
 type ConfigIpcCall = IpcCall<ConfigHandlers>

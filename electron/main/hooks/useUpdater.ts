@@ -21,6 +21,11 @@ autoUpdater.on('error', (error) => {
     console.error(error)
 })
 
+// 监听先下载进度
+autoUpdater.on('download-progress', (progress) => {
+    console.log(progress)
+})
+
 export const useUpdater = () => {
     const checkForUpdates = async () => {
         try {

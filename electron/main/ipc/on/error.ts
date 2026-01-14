@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron'
 
 export function registerErrorHandlers() {
-    ipcRenderer.on('error', (event, error) => {
+    ipcRenderer.on('error', (_, error) => {
         console.error(error)
     })
 }
