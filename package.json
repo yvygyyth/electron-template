@@ -44,6 +44,7 @@
     },
     "dependencies": {
         "better-sqlite3": "^12.5.0",
+        "electron-updater": "^6.7.3",
         "kysely": "^0.28.9",
         "vue": "^3.4.21",
         "zod": "^4.2.1"
