@@ -4,6 +4,15 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
 
+// 初始化数据库
+import { getDatabase, closeDatabase } from './db'
+
+// 注册所有 IPC 处理器
+import { registerIpcHandlers } from './ipc'
+
+// 初始化自动更新器
+import { useUpdater } from './hooks/useUpdater'
+
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -37,6 +46,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null
+let updater: ReturnType<typeof useUpdater> | null = null
 const preload = path.join(__dirname, '../preload/index.js')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
@@ -66,7 +76,16 @@ async function createWindow() {
     win.webContents.openDevTools()
 
     // Test actively push message to the Electron-Renderer
-    win.webContents.on('did-finish-load', () => {})
+    win.webContents.on('did-finish-load', () => {
+        // 窗口加载完成后，如果更新器还未初始化，则初始化它
+        if (!updater && win) {
+            updater = useUpdater(win)
+            // 延迟检查更新，避免影响应用启动速度
+            setTimeout(() => {
+                updater?.checkForUpdates()
+            }, 3000)
+        }
+    })
 
     // Make all links open with the browser, not with the application
     win.webContents.setWindowOpenHandler(({ url }) => {
@@ -76,11 +95,7 @@ async function createWindow() {
     // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 
-// 初始化数据库
-import { getDatabase, closeDatabase } from './db'
-
 // 注册所有 IPC 处理器
-import { registerIpcHandlers } from './ipc'
 registerIpcHandlers()
 
 app.whenReady().then(() => {
@@ -90,6 +105,8 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', async () => {
+    // 清理更新器
+    updater = null
     win = null
     // 关闭数据库连接
     await closeDatabase()
@@ -111,4 +128,9 @@ app.on('activate', () => {
     } else {
         createWindow()
     }
+})
+
+// 当窗口关闭时，清理更新器引用
+app.on('before-quit', () => {
+    updater = null
 })

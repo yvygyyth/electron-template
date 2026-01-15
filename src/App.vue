@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+import { useUpdater } from './hooks/useUpdater'
+
+// 初始化更新器监听
+useUpdater()
 </script>
 
 <template>

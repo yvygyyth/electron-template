@@ -39,5 +39,11 @@
         "AppImage"
         ],
         "artifactName": "${productName}-Linux-${version}.${ext}"
-    }
+    },
+    "publish": [
+        {
+            "provider": "generic",
+            "url": "http://118.193.78.36/starter"
+        }
+    ]
 }
