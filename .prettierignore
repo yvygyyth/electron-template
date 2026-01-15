@@ -3,3 +3,4 @@ public
 .local
 node_modules
 pnpm-lock.yaml
+electron-builder.json5
