@@ -1,12 +1,4 @@
 import { UpdaterIpcEvent } from '@share/index'
-import type {
-    UpdateAvailablePayload,
-    UpdateNotAvailablePayload,
-    UpdateErrorPayload,
-    DownloadProgressPayload,
-    UpdateDownloadedPayload
-} from '@share/index'
-
 /**
  * 格式化字节数为可读格式
  */
@@ -34,7 +26,7 @@ export function useUpdater() {
         console.log('[Updater] 🔍 正在检查更新...')
     })
 
-    window.ipcRenderer.on(UpdaterIpcEvent.updateAvailable, (_event: unknown, data: UpdateAvailablePayload) => {
+    window.ipcRenderer.on(UpdaterIpcEvent.updateAvailable, (_event, data) => {
         console.log('[Updater] ✨ 发现新版本:', {
             版本号: data.version,
             发布日期: data.releaseDate || '未知',
@@ -42,27 +34,27 @@ export function useUpdater() {
         })
     })
 
-    window.ipcRenderer.on(UpdaterIpcEvent.updateNotAvailable, (_event: unknown, data: UpdateNotAvailablePayload) => {
+    window.ipcRenderer.on(UpdaterIpcEvent.updateNotAvailable, (_event, data) => {
         console.log('[Updater] ✅ 当前已是最新版本:', {
             版本号: data.version
         })
     })
 
-    window.ipcRenderer.on(UpdaterIpcEvent.updateError, (_event: unknown, data: UpdateErrorPayload) => {
+    window.ipcRenderer.on(UpdaterIpcEvent.updateError, (_event, data) => {
         console.error('[Updater] ❌ 更新检查失败:', {
             错误消息: data.message,
             错误堆栈: data.stack || '无'
         })
     })
 
-    window.ipcRenderer.on(UpdaterIpcEvent.downloadProgress, (_event: unknown, data: DownloadProgressPayload) => {
+    window.ipcRenderer.on(UpdaterIpcEvent.downloadProgress, (_event, data) => {
         const transferred = formatBytes(data.transferred)
         const total = formatBytes(data.total)
         const speed = formatSpeed(data.bytesPerSecond)
         console.log(`[Updater] 📥 下载进度: ${data.percent.toFixed(2)}% (${transferred} / ${total}) - ${speed}`)
     })
 
-    window.ipcRenderer.on(UpdaterIpcEvent.updateDownloaded, (_event: unknown, data: UpdateDownloadedPayload) => {
+    window.ipcRenderer.on(UpdaterIpcEvent.updateDownloaded, (_event, data) => {
         console.log('[Updater] 🎉 更新下载完成:', {
             版本号: data.version,
             发布日期: data.releaseDate || '未知',

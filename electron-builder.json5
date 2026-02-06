@@ -43,7 +43,7 @@
     "publish": [
         {
             "provider": "generic",
-            "url": "http://118.193.78.36/starter"
+            "url": "http://127.0.0.1:3000/"
         }
     ]
 }
