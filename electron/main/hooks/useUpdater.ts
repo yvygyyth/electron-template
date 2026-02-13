@@ -1,4 +1,5 @@
-import { autoUpdater } from 'electron-updater'
+import updater from 'electron-updater'
+const { autoUpdater } = updater
 import { dialog, BrowserWindow } from 'electron'
 import {
     UpdaterIpcEvent,
