@@ -9,6 +9,12 @@ import {
     type UpdateDownloadedPayload
 } from '@share/updater'
 
+const builder_util_runtime_1 = require('builder-util-runtime')
+console.log('[builder-util-runtime] 导出键:', Object.keys(builder_util_runtime_1))
+console.log('[builder-util-runtime] retry 存在:', 'retry' in builder_util_runtime_1)
+console.log('[builder-util-runtime] typeof retry:', typeof builder_util_runtime_1.retry)
+console.log('[builder-util-runtime] 完整导出:', builder_util_runtime_1)
+
 autoUpdater.autoDownload = false
 
 // 更新相关的 IPC 频道名称（保持向后兼容，实际使用 UpdaterIpcEvent）
