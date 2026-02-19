@@ -133,7 +133,7 @@ export const useUpdater = (win: BrowserWindow | null) => {
             .then((results) => {
                 if (results.response === 0) {
                     // 用户选择立即重启
-                    autoUpdater.quitAndInstall(false, true)
+                    autoUpdater.quitAndInstall(true, true)
                 }
             })
     })
