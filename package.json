@@ -41,6 +41,7 @@
     },
     "dependencies": {
         "better-sqlite3": "^12.5.0",
+        "builder-util-runtime": "^9.5.1",
         "electron-updater": "^6.7.3",
         "kysely": "^0.28.9",
         "zod": "^4.2.1"
