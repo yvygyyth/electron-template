@@ -31,3 +31,7 @@ yarn.lock
 
 # Database files
 *.db
+
+# Rust
+target
+Cargo.lock
