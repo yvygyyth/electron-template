@@ -1,0 +1,17 @@
+{
+  "name": "addon",
+  "version": "0.1.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "napi build --platform",
+    "test": "node test.js"
+  },
+  "napi": {
+    "binaryName": "addon",
+    "packageName": "addon"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^2.18.0"
+  }
+}

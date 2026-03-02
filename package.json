@@ -24,6 +24,7 @@
         "build:win": "vue-tsc --noEmit && vite build && electron-builder --win",
         "preview": "vite preview",
         "rebuild": "npx electron-rebuild",
+        "build:addon": "cd addon && npm install && npm run build",
         "postinstall": "electron-builder install-app-deps"
     },
     "devDependencies": {
@@ -40,6 +41,7 @@
         "vue-tsc": "^2.0.6"
     },
     "dependencies": {
+        "addon": "file:./addon",
         "better-sqlite3": "^12.5.0",
         "builder-util-runtime": "^9.5.1",
         "electron-updater": "^6.7.3",
