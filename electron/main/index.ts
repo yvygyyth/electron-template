@@ -16,6 +16,11 @@ import { useUpdater } from './hooks/useUpdater'
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err)
+    process.exit(1)
+})
+
 // The built directory structure
 //
 // ├─┬ dist-electron

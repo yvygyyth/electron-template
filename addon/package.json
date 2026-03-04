@@ -1,10 +1,10 @@
 {
   "name": "addon",
   "version": "0.1.0",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "napi build --platform",
+    "build": "napi build --platform -o dist",
     "test": "node test.js"
   },
   "napi": {
@@ -12,6 +12,6 @@
     "packageName": "addon"
   },
   "devDependencies": {
-    "@napi-rs/cli": "^2.18.0"
+    "@napi-rs/cli": "^3.0.0"
   }
 }

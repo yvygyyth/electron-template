@@ -2,8 +2,9 @@ import fs from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import electron from 'vite-plugin-electron'
-import pkg from './package.json'
+import pkg from '../package.json'
 import path from 'node:path'
+import { compileToJsc } from './compile-to-jsc'
 
 // https://vitejs.dev/config/
 // Vite 配置文件
@@ -17,10 +18,10 @@ export default defineConfig(({ command }) => {
     return {
         resolve: {
             alias: {
-                '@': path.resolve(__dirname, 'src'),
-                '@main': path.resolve(__dirname, 'electron/main'),
-                '@preload': path.resolve(__dirname, 'electron/preload'),
-                '@share': path.resolve(__dirname, 'electron/share')
+                '@': path.resolve(__dirname, '../src'),
+                '@main': path.resolve(__dirname, '../electron/main'),
+                '@preload': path.resolve(__dirname, '../electron/preload'),
+                '@share': path.resolve(__dirname, '../electron/share')
             }
         },
         plugins: [
@@ -36,10 +37,18 @@ export default defineConfig(({ command }) => {
                         }
                     },
                     vite: {
+                        plugins: [
+                            {
+                                name: 'compile-to-jsc',
+                                closeBundle: async () => {
+                                    await compileToJsc()
+                                }
+                            }
+                        ],
                         resolve: {
                             alias: {
-                                '@main': path.resolve(__dirname, 'electron/main'),
-                                '@share': path.resolve(__dirname, 'electron/share')
+                                '@main': path.resolve(__dirname, '../electron/main'),
+                                '@share': path.resolve(__dirname, '../electron/share')
                             }
                         },
                         build: {
@@ -64,11 +73,19 @@ export default defineConfig(({ command }) => {
                         reload()
                     },
                     vite: {
+                        plugins: [
+                            {
+                                name: 'compile-to-jsc',
+                                closeBundle: async () => {
+                                    await compileToJsc()
+                                }
+                            }
+                        ],
                         resolve: {
                             alias: {
-                                '@main': path.resolve(__dirname, 'electron/main'),
-                                '@preload': path.resolve(__dirname, 'electron/preload'),
-                                '@share': path.resolve(__dirname, 'electron/share')
+                                '@main': path.resolve(__dirname, '../electron/main'),
+                                '@preload': path.resolve(__dirname, '../electron/preload'),
+                                '@share': path.resolve(__dirname, '../electron/share')
                             }
                         },
                         build: {

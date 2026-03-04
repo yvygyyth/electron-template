@@ -15,5 +15,5 @@
             "@share/*": ["./electron/share/*"]
         }
     },
-    "include": ["vite.config.ts", "package.json", "electron/main", "electron/preload", "electron/share"]
+    "include": ["config/**/*.ts", "package.json", "electron/main", "electron/preload", "electron/share"]
 }

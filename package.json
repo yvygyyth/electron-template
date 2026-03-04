@@ -19,9 +19,12 @@
         }
     },
     "scripts": {
-        "dev": "vite",
-        "build": "vue-tsc --noEmit && vite build && electron-builder",
-        "build:win": "vue-tsc --noEmit && vite build && electron-builder --win",
+        "dev": "vite --config config/vite.config.ts",
+        "dev:jsc": "vite --config config/vite.config.jsc.ts",
+        "build": "vue-tsc --noEmit && vite build --config config/vite.config.ts && electron-builder",
+        "build:jsc": "vue-tsc --noEmit && vite build --config config/vite.config.jsc.ts && electron-builder",
+        "build:win": "vue-tsc --noEmit && vite build --config config/vite.config.ts && electron-builder --win",
+        "build:win:jsc": "vue-tsc --noEmit && vite build --config config/vite.config.jsc.ts && electron-builder --win",
         "preview": "vite preview",
         "rebuild": "npx electron-rebuild",
         "build:addon": "cd addon && npm install && npm run build",
@@ -44,6 +47,7 @@
         "addon": "file:./addon",
         "better-sqlite3": "^12.5.0",
         "builder-util-runtime": "^9.5.1",
+        "bytenode": "^1.5.7",
         "electron-updater": "^6.7.3",
         "kysely": "^0.28.9",
         "zod": "^4.2.1"
