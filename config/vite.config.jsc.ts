@@ -33,18 +33,12 @@ export default defineConfig(({ command }) => {
                         if (process.env.VSCODE_DEBUG) {
                             console.log(/* 用于 `.vscode/.debug.script.mjs` */ '[startup] Electron App')
                         } else {
-                            startup()
+                            // 先完成 JSC 编译和 addon 构建，再启动 Electron，避免竞态
+                            compileToJsc().then(() => startup())
                         }
                     },
                     vite: {
-                        plugins: [
-                            {
-                                name: 'compile-to-jsc',
-                                closeBundle: async () => {
-                                    await compileToJsc()
-                                }
-                            }
-                        ],
+                        plugins: [],
                         resolve: {
                             alias: {
                                 '@main': path.resolve(__dirname, '../electron/main'),
@@ -73,14 +67,7 @@ export default defineConfig(({ command }) => {
                         reload()
                     },
                     vite: {
-                        plugins: [
-                            {
-                                name: 'compile-to-jsc',
-                                closeBundle: async () => {
-                                    await compileToJsc()
-                                }
-                            }
-                        ],
+                        plugins: [],
                         resolve: {
                             alias: {
                                 '@main': path.resolve(__dirname, '../electron/main'),
